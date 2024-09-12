@@ -1,4 +1,20 @@
-const { select } = require('@inquirer/prompts');
+const { select, input } = require('@inquirer/prompts');
+
+let goals = [];
+
+const registerGoal = async () => {
+
+    const goal = await input({ message: "Digite uma meta: "});
+
+    if (goal.length == 0) {
+
+        console.log("A meta não pode ser vazia.");
+        return;
+    }
+
+    goals.push(
+        { value: goal, checked: false });
+}
 
 const start = async () => {
 
@@ -17,10 +33,11 @@ const start = async () => {
                 value: "sair"
             }],
         })
-        
+
         switch(option) {
             case "cadastrar":
-                console.log("Vamos cadastrar!");
+                await registerGoal();
+                console.log(goals);
                 break;
             case "listar":
                 console.log("Vamos listar!");
@@ -31,6 +48,6 @@ const start = async () => {
         
         }
     }
-};
+}
 
 start();
