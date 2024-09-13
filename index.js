@@ -23,16 +23,16 @@ const listGoals = async () => {
         choices: [...goals]
     })
 
+    goals.forEach((goal) => {
+
+        goal.checked = false;
+    })
+
     if (answers.length == 0) {
 
         console.log("Nenhuma meta selecionada!");
         return;
     }
-
-    goals.forEach((goal) => {
-
-        goal.checked = false;
-    })
     
     answers.forEach((answer) => {
 
