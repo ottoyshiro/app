@@ -1,4 +1,4 @@
-const { select, input } = require('@inquirer/prompts');
+const { select, input, checkbox } = require('@inquirer/prompts');
 
 let goals = [];
 
@@ -16,6 +16,36 @@ const registerGoal = async () => {
         { value: goal, checked: false });
 }
 
+const listGoals = async () => {
+
+    const answers = await checkbox({
+        message: "Use as setas para mudar de meta, o espaço para marcar ou desmarcar e o enter para finalizar a etapa",
+        choices: [...goals]
+    })
+
+    if (answers.length == 0) {
+
+        console.log("Nenhuma meta selecionada!");
+        return;
+    }
+    console.log(goals);
+    goals.forEach((goal) => {
+
+        goal.checked = false;
+    })
+
+    answers.forEach((answer) => {
+
+        const goal = goals.find((g) => {
+            
+            return g.value == answer;
+        })
+        goal.checked = true;
+    })
+    
+    console.log("Meta(s) concluída(s).");
+}
+
 const start = async () => {
 
     while (true) {
@@ -29,6 +59,10 @@ const start = async () => {
                 value: "cadastrar"
             },
             {
+                name: "Listar metas",
+                value: "listar"
+            },
+            {
                 name: "Sair",
                 value: "sair"
             }],
@@ -40,6 +74,7 @@ const start = async () => {
                 console.log(goals);
                 break;
             case "listar":
+                await listGoals();
                 console.log("Vamos listar!");
                 break;
             case "sair":
