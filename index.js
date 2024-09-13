@@ -83,6 +83,34 @@ const openGoals = async () => {
     })
 }
 
+const deleteGoals = async () => {
+
+    const unmarkedGoals = goals.map((goal) => {
+
+        return { value: goal.value, checked: false };
+    })
+    const deletedItems = await checkbox({
+        message: "Use as setas para mudar de meta, o espaço para marcar ou desmarcar e o enter para finalizar a etapa",
+        choices: [...unmarkedGoals]
+    })
+
+    if (deletedItems == 0) {
+
+        console.log("Nenhum item selecionado!");
+        return;
+    }
+
+    deletedItems.forEach((item) => {
+
+        goals = goals.filter((goal) => {
+
+            return goal.value != item;
+        })
+    })
+
+    console.log("Meta(s) deletada(s) com sucesso!");
+}
+
 const start = async () => {
 
     while (true) {
@@ -108,6 +136,10 @@ const start = async () => {
                 value: "abertas"
             },
             {
+                name: "Deletar metas",
+                value: "deletar"
+            },
+            {
                 name: "Sair",
                 value: "sair"
             }],
@@ -125,9 +157,12 @@ const start = async () => {
             case "realizadas":
                 await finalizedGoals();
                 break;
-                case "abertas":
-                    await openGoals();
-                    break;
+            case "abertas":
+                await openGoals();
+                break;
+            case "deletar":
+                await deleteGoals();
+                break;
             case "sair":
                 console.log("Saindo");
                 return;    
