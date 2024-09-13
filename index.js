@@ -1,5 +1,7 @@
 const { select, input, checkbox } = require('@inquirer/prompts');
 
+let message = "Seja bem-vindo ao app de metas!";
+
 let goals = [];
 
 const registerGoal = async () => {
@@ -8,12 +10,14 @@ const registerGoal = async () => {
 
     if (goal.length == 0) {
 
-        console.log("A meta não pode ser vazia.");
+        message = "A meta não pode ser vazia.";
         return;
     }
 
     goals.push(
         { value: goal, checked: false });
+    
+    message = `Meta '${goal}' cadastrada com sucesso!`;
 }
 
 const listGoals = async () => {
@@ -30,7 +34,7 @@ const listGoals = async () => {
 
     if (answers.length == 0) {
 
-        console.log("Nenhuma meta selecionada!");
+        message = "Nenhuma meta selecionada!";
         return;
     }
     
@@ -43,7 +47,7 @@ const listGoals = async () => {
         goal.checked = true;
     })
     
-    console.log("Meta(s) concluída(s).");
+    message = "Meta(s) marcada(s) como concluída(s).";
 }
 
 const finalizedGoals = async () => {
@@ -55,7 +59,7 @@ const finalizedGoals = async () => {
 
     if (finalized.length == 0) {
 
-        console.log("Não há nenhuma meta realizada! :(");
+        message = "Não há nenhuma meta realizada! :(";
         return;
     }
 
@@ -74,7 +78,7 @@ const openGoals = async () => {
 
     if (open.length == 0) {
 
-        console.log("Você não tem metas abertas! :)");
+        message = "Você não tem metas abertas! :)";
     }
 
     await select({
@@ -96,7 +100,7 @@ const deleteGoals = async () => {
 
     if (deletedItems == 0) {
 
-        console.log("Nenhum item selecionado!");
+        message = "Nenhum item selecionado!";
         return;
     }
 
@@ -108,12 +112,26 @@ const deleteGoals = async () => {
         })
     })
 
-    console.log("Meta(s) deletada(s) com sucesso!");
+    message = "Meta(s) deletada(s) com sucesso!";
+}
+
+const showMessage = () => {
+
+    console.clear();
+
+    if (message != "") {
+        
+        console.log(message);
+        console.log("");
+        message = "";
+    }
 }
 
 const start = async () => {
 
     while (true) {
+
+        showMessage();
 
         const option = await select({
 
@@ -148,11 +166,9 @@ const start = async () => {
         switch(option) {
             case "cadastrar":
                 await registerGoal();
-                console.log(goals);
                 break;
             case "listar":
                 await listGoals();
-                
                 break;
             case "realizadas":
                 await finalizedGoals();
